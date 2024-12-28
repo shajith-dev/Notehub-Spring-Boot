@@ -17,7 +17,7 @@ public class UserDAO {
     public User getUser(Long userId){
         return dslContext.select(USERS.USER_ID,USERS.CREATED_AT,USERS.USERNAME,USERS.URL,USERS.DESCRIPTION,USERS.EMAIL_ID,USERS)
                 .from(USERS)
-                .where(USERS.USER_ID.eq(Math.toIntExact(userId)))
+                .where(USERS.USER_ID.eq(userId))
                 .fetchOneInto(User.class);
     }
 
@@ -35,7 +35,7 @@ public class UserDAO {
                 .returning().fetchOne();
 
         if(record != null){
-            user.setUserId(record.getUserId().longValue());
+            user.setUserId(record.getUserId());
             user.setCreatedAt(record.getCreatedAt());
         }
         return user;
