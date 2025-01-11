@@ -1,4 +1,4 @@
-package com.example.notehub.Subject;
+package com.example.notehub.subject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

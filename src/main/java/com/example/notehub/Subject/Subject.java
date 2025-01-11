@@ -1,4 +1,4 @@
-package com.example.notehub.Subject;
+package com.example.notehub.subject;
 
 public class Subject {
     private String name;

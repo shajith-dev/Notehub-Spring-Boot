@@ -1,4 +1,4 @@
-package com.example.notehub.Subject;
+package com.example.notehub.subject;
 
 import com.example.jooq.generated.tables.records.SubjectsRecord;
 import org.jooq.DSLContext;
