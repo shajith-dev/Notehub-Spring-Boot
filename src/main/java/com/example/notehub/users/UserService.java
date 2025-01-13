@@ -41,13 +41,16 @@ public class UserService{
         return userDAO.createUser(user);
     }
 
-    public String uploadProfilePicture(Long userId,MultipartFile file){
+    public void uploadProfilePicture(Long userId,MultipartFile file){
         String fileKey = "profile-pictures/" + userId + "/" + file.getOriginalFilename();
         try {
             s3Service.uploadFile(BUCKET_NAME,fileKey,file);
-        }catch (Exception e){
+        }catch (Exception e) {
             System.out.println();
         }
-        return "";
+        User user = new User();
+        user.setUserId(userId);
+        user.setUrl(fileKey);
+        userDAO.updateUser(user);
     }
 }

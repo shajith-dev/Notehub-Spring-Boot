@@ -24,8 +24,8 @@ public class UserController {
     }
 
     @PostMapping(path = "/{userId}/pfp")
-    public String uploadProfilePicture(@PathVariable Long userId,@RequestParam("file")MultipartFile file){
-        return userService.uploadProfilePicture(userId,file);
+    public void uploadProfilePicture(@PathVariable Long userId,@RequestParam("file")MultipartFile file){
+        userService.uploadProfilePicture(userId,file);
     }
 
 }

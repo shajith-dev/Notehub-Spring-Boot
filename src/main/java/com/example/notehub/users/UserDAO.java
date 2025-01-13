@@ -2,6 +2,9 @@ package com.example.notehub.users;
 
 import com.example.jooq.generated.tables.records.UsersRecord;
 import org.jooq.DSLContext;
+import org.jooq.Statement;
+import org.jooq.UpdateSetFirstStep;
+import org.jooq.UpdateSetStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import static com.example.jooq.generated.Tables.USERS;
@@ -45,6 +48,21 @@ public class UserDAO {
         return dslContext.selectFrom(USERS)
                 .where(USERS.USERNAME.eq(userName))
                 .and(USERS.IS_DELETED.eq(false))
+                .fetchOneInto(User.class);
+    }
+
+    public User updateUser(User user){
+        UpdateSetFirstStep<UsersRecord> statement = dslContext.update(USERS);
+        if(user.getUserName() != null){
+            statement.set(USERS.USERNAME,user.getUserName());
+        }
+        if(user.getDescription() != null){
+            statement.set(USERS.DESCRIPTION,user.getDescription());
+        }
+        return statement.set(USERS.URL,user.getUrl())
+                .where(USERS.USER_ID.eq(user.getUserId()))
+                .and(USERS.IS_DELETED.eq(false))
+                .returning()
                 .fetchOneInto(User.class);
     }
 }
