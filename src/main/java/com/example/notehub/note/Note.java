@@ -5,7 +5,6 @@ public class Note {
     private Long createdBy;
     private Boolean isDeleted;
     private String title;
-    private String description;
     private String url;
     private Long likes;
     private Long subjectId;
@@ -17,7 +16,6 @@ public class Note {
         this.createdBy = createdBy;
         this.isDeleted = isDeleted;
         this.title = title;
-        this.description = description;
         this.url = url;
         this.likes = likes;
         this.subjectId = subjectId;
@@ -55,14 +53,6 @@ public class Note {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getUrl() {
         return url;
     }
@@ -94,7 +84,6 @@ public class Note {
                 ", createdBy=" + createdBy +
                 ", isDeleted=" + isDeleted +
                 ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
                 ", url='" + url + '\'' +
                 ", likes=" + likes +
                 ", subjectId=" + subjectId +

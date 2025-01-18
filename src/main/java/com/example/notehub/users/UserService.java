@@ -24,6 +24,9 @@ public class UserService{
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Value("${aws.baseUrlTemplate}")
+    private String BASE_URL_TEMPLATE;
+
     public User getUser(Long userId){
         return userDAO.getUser(userId);
     }
@@ -50,7 +53,8 @@ public class UserService{
         }
         User user = new User();
         user.setUserId(userId);
-        user.setUrl(fileKey);
+        String finalUrl = String.format(BASE_URL_TEMPLATE,BUCKET_NAME,fileKey);
+        user.setUrl(finalUrl);
         userDAO.updateUser(user);
     }
 }
