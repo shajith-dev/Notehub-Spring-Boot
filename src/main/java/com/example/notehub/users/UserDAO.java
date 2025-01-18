@@ -2,9 +2,7 @@ package com.example.notehub.users;
 
 import com.example.jooq.generated.tables.records.UsersRecord;
 import org.jooq.DSLContext;
-import org.jooq.Statement;
 import org.jooq.UpdateSetFirstStep;
-import org.jooq.UpdateSetStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import static com.example.jooq.generated.Tables.USERS;
