@@ -12,13 +12,13 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping
-    public Comment createComment(@PathVariable("noteId") Long noteId, Comment comment){
+    public Comment createComment(@PathVariable("noteId") Long noteId, @RequestBody Comment comment){
         comment.setNoteId(noteId);
         return commentService.createComment(comment);
     }
 
-    @PutMapping(path = "/{commentId}")
-    public void deleteComment(@PathVariable("noteId") Long noteId, @PathVariable Long commentId){
+    @DeleteMapping(path = "/{commentId}")
+    public void deleteComment(@PathVariable("noteId") Long noteId, @PathVariable("commentId") Long commentId){
         commentService.deleteComment(commentId);
     }
 
@@ -28,7 +28,7 @@ public class CommentController {
     }
 
     @PutMapping(path = "/{commentId}")
-    public Comment editComment(@PathVariable("noteId") Long noteId, @PathVariable Long commentId, Comment comment){
+    public Comment editComment(@PathVariable("noteId") Long noteId, @PathVariable("commentId") Long commentId, Comment comment){
         return commentService.editComment(noteId,commentId,comment.getContent());
     }
 

@@ -27,7 +27,7 @@ public class NoteService {
     }
 
     public Note createNote(Note note, MultipartFile file){
-        String fileKey = "notes/" + note.getCreatedBy() + "/" + file.getOriginalFilename();
+        String fileKey = "notes/" + note.getCreatedBy() + "/" + note.getTitle();
         try {
             s3Service.uploadFile(BUCKET_NAME,fileKey,file);
         }catch (Exception e) {
