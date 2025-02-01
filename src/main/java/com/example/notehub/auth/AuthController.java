@@ -37,7 +37,8 @@ public class AuthController {
         );
         if(authentication.isAuthenticated()){
             String token = jwtService.generateToken(authRequest.getUserName());
-            return new AuthResponse(authRequest.getUserName(),token);
+            Long userId = userService.getUserByUserName(authRequest.getUserName()).getUserId();
+            return new AuthResponse(userId,authRequest.getUserName(),token);
         }else{
             throw new UsernameNotFoundException("Invalid User Request!");
         }
