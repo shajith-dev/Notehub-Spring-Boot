@@ -1,10 +1,14 @@
 package com.example.notehub.note;
 
+import com.example.notehub.dto.PagedResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/notes")
@@ -27,6 +31,11 @@ public class NoteController {
     @PutMapping(path = "/noteId")
     public void toggleLike(@PathVariable("noteId") Long noteId,@RequestParam String like){
         noteService.toggleLike(noteId,like);
+    }
+
+    @GetMapping(path = "/search")
+    public PagedResult<Note> searchNotes(@RequestParam("q") String query, @RequestParam("sids") List<Long> subjectIds, @RequestParam(value = "page",defaultValue = "0") Long page){
+        return noteService.searchNotes(query,subjectIds,page);
     }
 
 }

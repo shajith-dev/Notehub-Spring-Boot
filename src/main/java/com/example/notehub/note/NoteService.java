@@ -1,10 +1,13 @@
 package com.example.notehub.note;
 
 import com.example.notehub.aws.S3Service;
+import com.example.notehub.dto.PagedResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @Service
@@ -46,4 +49,7 @@ public class NoteService {
         noteDAO.deleteNote(noteId);
     }
 
+    public PagedResult<Note> searchNotes(String query, List<Long> subjectIds, Long page){
+        return noteDAO.searchNotes(query,subjectIds,page);
+    }
 }

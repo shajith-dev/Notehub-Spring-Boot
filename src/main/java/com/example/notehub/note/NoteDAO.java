@@ -1,14 +1,20 @@
 package com.example.notehub.note;
 
 import com.example.jooq.generated.tables.records.NotesRecord;
+import com.example.notehub.dto.PagedResult;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 import static com.example.jooq.generated.Tables.NOTES;
 
 @Repository
 public class NoteDAO {
+
+    private static final Long OFFSET = 20L;
+    private static final Long LIMIT = 20L;
 
     @Autowired
     private DSLContext dslContext;
@@ -50,4 +56,25 @@ public class NoteDAO {
                 .and(NOTES.IS_DELETED.eq(false))
                 .execute();
     }
+
+    public PagedResult<Note> searchNotes(String query, List<Long> subjectIds, Long page) {
+
+        List<Note> notes = dslContext.selectFrom(NOTES)
+                .where(NOTES.TITLE.contains(query))
+                .and(NOTES.SUBJECT_ID.in(subjectIds))
+                .and(NOTES.IS_DELETED.eq(false))
+                .limit(LIMIT + 1)
+                .offset(OFFSET * page)
+                .fetchInto(Note.class);
+
+
+        boolean hasMore = notes.size() > LIMIT;
+
+        if (hasMore) {
+            notes.removeLast();
+        }
+
+        return new PagedResult<>(notes, hasMore);
+    }
+
 }
