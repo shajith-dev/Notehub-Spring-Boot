@@ -2,6 +2,8 @@ package com.example.notehub.note;
 
 import com.example.notehub.aws.S3Service;
 import com.example.notehub.dto.PagedResult;
+import com.example.notehub.users.User;
+import com.example.notehub.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class NoteService {
 
     @Autowired
     private S3Service s3Service;
+
+    @Autowired
+    private UserService userService;
 
     @Value("${aws.bucketName}")
     private String BUCKET_NAME;
@@ -51,5 +56,11 @@ public class NoteService {
 
     public PagedResult<Note> searchNotes(String query, List<Long> subjectIds, Long page){
         return noteDAO.searchNotes(query,subjectIds,page);
+    }
+
+    public List<Note> getMyNotes(){
+        String userName = userService.getCurrentUsername();
+        User user = userService.getUserByUserName(userName);
+        return noteDAO.getNotes(user.getUserId());
     }
 }

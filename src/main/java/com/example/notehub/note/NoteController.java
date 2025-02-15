@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,6 +35,11 @@ public class NoteController {
     @GetMapping(path = "/search")
     public PagedResult<Note> searchNotes(@RequestParam("q") String query, @RequestParam("sids") List<Long> subjectIds, @RequestParam(value = "page",defaultValue = "0") Long page){
         return noteService.searchNotes(query,subjectIds,page);
+    }
+
+    @GetMapping(path = "/me")
+    public List<Note> getMyNotes(){
+        return noteService.getMyNotes();
     }
 
 }

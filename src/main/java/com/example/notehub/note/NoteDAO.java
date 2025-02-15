@@ -77,4 +77,11 @@ public class NoteDAO {
         return new PagedResult<>(notes, hasMore);
     }
 
+    public List<Note> getNotes(Long userId){
+        return dslContext.selectFrom(NOTES)
+                .where(NOTES.CREATED_BY.eq(userId))
+                .and(NOTES.IS_DELETED.eq(false))
+                .fetchInto(Note.class);
+    }
+
 }
