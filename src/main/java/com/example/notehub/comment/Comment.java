@@ -1,20 +1,37 @@
 package com.example.notehub.comment;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public class Comment {
     private Long commentId;
     private Long createdBy;
+    private LocalDateTime createdAt;
     private Long noteId;
     private Long parentId;
     private Boolean isDeleted;
     private String content;
+    private List<Comment> replies;
 
-    public Comment(Long commentId, Long createdBy, Long noteId, Long parentId, Boolean isDeleted, String content) {
+    public Comment(Long commentId, Long createdBy, LocalDateTime createdAt, Long noteId, Long parentId, Boolean isDeleted, String content, List<Comment> replies) {
+        this.commentId = commentId;
+        this.createdBy = createdBy;
+        this.createdAt = createdAt;
+        this.noteId = noteId;
+        this.parentId = parentId;
+        this.isDeleted = isDeleted;
+        this.content = content;
+        this.replies = replies;
+    }
+
+    public Comment(Long commentId, Long createdBy, Long noteId, Long parentId, Boolean isDeleted, String content, List<Comment> replies) {
         this.commentId = commentId;
         this.createdBy = createdBy;
         this.noteId = noteId;
         this.parentId = parentId;
         this.isDeleted = isDeleted;
         this.content = content;
+        this.replies = replies;
     }
 
     public Comment(){}
@@ -67,15 +84,33 @@ public class Comment {
         this.content = content;
     }
 
+    public List<Comment> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(List<Comment> replies) {
+        this.replies = replies;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public String toString() {
         return "Comment{" +
                 "commentId=" + commentId +
                 ", createdBy=" + createdBy +
+                ", createdAt=" + createdAt +
                 ", noteId=" + noteId +
                 ", parentId=" + parentId +
                 ", isDeleted=" + isDeleted +
                 ", content='" + content + '\'' +
+                ", replies=" + replies +
                 '}';
     }
 }

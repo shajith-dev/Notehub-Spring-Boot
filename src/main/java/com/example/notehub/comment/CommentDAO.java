@@ -40,6 +40,7 @@ public class CommentDAO {
         return dslContext.selectFrom(COMMENTS)
                 .where(COMMENTS.NOTE_ID.eq(noteId))
                 .and(COMMENTS.IS_DELETED.eq(false))
+                .orderBy(COMMENTS.CREATED_AT)
                 .fetchInto(Comment.class);
     }
 
