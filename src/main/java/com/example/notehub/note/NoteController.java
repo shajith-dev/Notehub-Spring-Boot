@@ -27,13 +27,8 @@ public class NoteController {
         return noteService.createNote(note,file);
     }
 
-    @PutMapping(path = "/noteId")
-    public void toggleLike(@PathVariable("noteId") Long noteId,@RequestParam String like){
-        noteService.toggleLike(noteId,like);
-    }
-
     @GetMapping(path = "/search")
-    public PagedResult<Note> searchNotes(@RequestParam("q") String query, @RequestParam("sids") List<Long> subjectIds, @RequestParam(value = "page",defaultValue = "0") Long page){
+    public PagedResult<Note> searchNotes(@RequestParam("q") String query, @RequestParam(value = "sids", required = false) List<Long> subjectIds, @RequestParam(value = "page",defaultValue = "0") Long page){
         return noteService.searchNotes(query,subjectIds,page);
     }
 

@@ -46,10 +46,6 @@ public class NoteService {
         return noteDAO.createNote(note);
     }
 
-    public void toggleLike(Long noteId,String like){
-        noteDAO.toggleLike(noteId,like.equals("like") ? 1L : -1L);
-    }
-
     public void deleteNote(Long noteId){
         noteDAO.deleteNote(noteId);
     }

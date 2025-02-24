@@ -2,7 +2,9 @@ package com.example.notehub.note;
 
 import com.example.jooq.generated.tables.records.NotesRecord;
 import com.example.notehub.dto.PagedResult;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +15,8 @@ import static com.example.jooq.generated.Tables.NOTES;
 @Repository
 public class NoteDAO {
 
-    private static final Long OFFSET = 20L;
-    private static final Long LIMIT = 20L;
+    private static final Long OFFSET = 5L;
+    private static final Long LIMIT = 5L;
 
     @Autowired
     private DSLContext dslContext;
@@ -41,14 +43,6 @@ public class NoteDAO {
         return note;
     }
 
-    public void toggleLike(Long noteId,Long value){
-        dslContext.update(NOTES)
-                .set(NOTES.LIKES,NOTES.LIKES.plus(value))
-                .where(NOTES.NOTE_ID.eq(noteId))
-                .and(NOTES.IS_DELETED.eq(false))
-                .execute();
-    }
-
     public void deleteNote(Long noteId){
         dslContext.update(NOTES)
                 .set(NOTES.IS_DELETED,true)
@@ -58,11 +52,13 @@ public class NoteDAO {
     }
 
     public PagedResult<Note> searchNotes(String query, List<Long> subjectIds, Long page) {
+        Condition subjectCondition = subjectIds != null ? NOTES.SUBJECT_ID.in(subjectIds) : DSL.trueCondition();
 
         List<Note> notes = dslContext.selectFrom(NOTES)
                 .where(NOTES.TITLE.contains(query))
-                .and(NOTES.SUBJECT_ID.in(subjectIds))
+                .and(subjectCondition)
                 .and(NOTES.IS_DELETED.eq(false))
+                .orderBy(NOTES.NOTE_ID)
                 .limit(LIMIT + 1)
                 .offset(OFFSET * page)
                 .fetchInto(Note.class);

@@ -4,16 +4,14 @@ public class Comment {
     private Long commentId;
     private Long createdBy;
     private Long noteId;
-    private Long likes;
     private Long parentId;
     private Boolean isDeleted;
     private String content;
 
-    public Comment(Long commentId, Long createdBy, Long noteId, Long likes, Long parentId, Boolean isDeleted, String content) {
+    public Comment(Long commentId, Long createdBy, Long noteId, Long parentId, Boolean isDeleted, String content) {
         this.commentId = commentId;
         this.createdBy = createdBy;
         this.noteId = noteId;
-        this.likes = likes;
         this.parentId = parentId;
         this.isDeleted = isDeleted;
         this.content = content;
@@ -43,14 +41,6 @@ public class Comment {
 
     public void setNoteId(Long noteId) {
         this.noteId = noteId;
-    }
-
-    public Long getLikes() {
-        return likes;
-    }
-
-    public void setLikes(Long likes) {
-        this.likes = likes;
     }
 
     public Long getParentId() {
@@ -83,7 +73,6 @@ public class Comment {
                 "commentId=" + commentId +
                 ", createdBy=" + createdBy +
                 ", noteId=" + noteId +
-                ", likes=" + likes +
                 ", parentId=" + parentId +
                 ", isDeleted=" + isDeleted +
                 ", content='" + content + '\'' +

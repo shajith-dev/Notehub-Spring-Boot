@@ -6,19 +6,19 @@ public class Note {
     private Boolean isDeleted;
     private String title;
     private String url;
-    private Long likes;
     private Long subjectId;
+    private String description;
 
     public Note(){}
 
-    public Note(Long noteId, Long createdBy, Boolean isDeleted, String title, String description, String url, Long likes, Long subjectId) {
+    public Note(Long noteId, Long createdBy, Boolean isDeleted, String title, String description, String url, Long subjectId) {
         this.noteId = noteId;
         this.createdBy = createdBy;
         this.isDeleted = isDeleted;
         this.title = title;
         this.url = url;
-        this.likes = likes;
         this.subjectId = subjectId;
+        this.description = description;
     }
 
     public Long getNoteId() {
@@ -61,20 +61,20 @@ public class Note {
         this.url = url;
     }
 
-    public Long getLikes() {
-        return likes;
-    }
-
-    public void setLikes(Long likes) {
-        this.likes = likes;
-    }
-
     public Long getSubjectId() {
         return subjectId;
     }
 
     public void setSubjectId(Long subjectId) {
         this.subjectId = subjectId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -85,8 +85,8 @@ public class Note {
                 ", isDeleted=" + isDeleted +
                 ", title='" + title + '\'' +
                 ", url='" + url + '\'' +
-                ", likes=" + likes +
                 ", subjectId=" + subjectId +
+                ", description='" + description + '\'' +
                 '}';
     }
 }
