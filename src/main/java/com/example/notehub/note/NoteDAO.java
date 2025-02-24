@@ -15,8 +15,8 @@ import static com.example.jooq.generated.Tables.NOTES;
 @Repository
 public class NoteDAO {
 
-    private static final Long OFFSET = 5L;
-    private static final Long LIMIT = 5L;
+    private static final Long OFFSET = 20L;
+    private static final Long LIMIT = 20L;
 
     @Autowired
     private DSLContext dslContext;
