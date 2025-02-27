@@ -2,12 +2,14 @@ package com.example.notehub.comment;
 
 import com.example.jooq.generated.tables.records.CommentsRecord;
 import org.jooq.DSLContext;
+import org.jooq.Record7;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 import static com.example.jooq.generated.Tables.COMMENTS;
+import static com.example.jooq.generated.Tables.USERS;
 
 @Repository
 public class CommentDAO {
@@ -37,11 +39,26 @@ public class CommentDAO {
     }
 
     public List<Comment> getAllComments(Long noteId){
-        return dslContext.selectFrom(COMMENTS)
+         List<Record7<Long, Long, String, Long, Long, String, String>> commentRecords = dslContext
+                .select(COMMENTS.COMMENT_ID,COMMENTS.NOTE_ID,COMMENTS.CONTENT,COMMENTS.PARENT_ID,COMMENTS.CREATED_BY,USERS.USERNAME,USERS.URL)
+                .from(COMMENTS)
+                .join(USERS)
+                .on(COMMENTS.CREATED_BY.eq(USERS.USER_ID))
                 .where(COMMENTS.NOTE_ID.eq(noteId))
-                .and(COMMENTS.IS_DELETED.eq(false))
+                .and(COMMENTS.IS_DELETED.isFalse())
                 .orderBy(COMMENTS.CREATED_AT)
-                .fetchInto(Comment.class);
+                .fetch();
+        return commentRecords.stream().map(record -> {
+            Comment comment = new Comment();
+            comment.setCommentId(record.component1());
+            comment.setNoteId(record.component2());
+            comment.setContent(record.component3());
+            comment.setParentId(record.component4());
+            comment.setCreatedBy(record.component5());
+            comment.setAuthor(record.component6());
+            comment.setAuthorPfp(record.component7());
+            return comment;
+        }).toList();
     }
 
     public Comment editComment(Long noteId,Long commentId,String content){

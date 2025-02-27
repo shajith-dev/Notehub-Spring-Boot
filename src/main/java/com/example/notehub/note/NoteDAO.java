@@ -15,8 +15,8 @@ import static com.example.jooq.generated.Tables.NOTES;
 @Repository
 public class NoteDAO {
 
-    private static final Long OFFSET = 20L;
-    private static final Long LIMIT = 20L;
+    private static final Long OFFSET = 2L;
+    private static final Long LIMIT = 2L;
 
     @Autowired
     private DSLContext dslContext;
@@ -52,7 +52,7 @@ public class NoteDAO {
     }
 
     public PagedResult<Note> searchNotes(String query, List<Long> subjectIds, Long page) {
-        Condition subjectCondition = subjectIds != null ? NOTES.SUBJECT_ID.in(subjectIds) : DSL.trueCondition();
+        Condition subjectCondition = !(subjectIds == null || subjectIds.isEmpty()) ? NOTES.SUBJECT_ID.in(subjectIds) : DSL.trueCondition();
 
         List<Note> notes = dslContext.selectFrom(NOTES)
                 .where(NOTES.TITLE.contains(query))

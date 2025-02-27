@@ -6,6 +6,8 @@ import java.util.List;
 public class Comment {
     private Long commentId;
     private Long createdBy;
+    private String author;
+    private String authorPfp;
     private LocalDateTime createdAt;
     private Long noteId;
     private Long parentId;
@@ -13,20 +15,12 @@ public class Comment {
     private String content;
     private List<Comment> replies;
 
-    public Comment(Long commentId, Long createdBy, LocalDateTime createdAt, Long noteId, Long parentId, Boolean isDeleted, String content, List<Comment> replies) {
+    public Comment(Long commentId, Long createdBy, String author, String authorPfp, LocalDateTime createdAt, Long noteId, Long parentId, Boolean isDeleted, String content, List<Comment> replies) {
         this.commentId = commentId;
         this.createdBy = createdBy;
+        this.author = author;
+        this.authorPfp = authorPfp;
         this.createdAt = createdAt;
-        this.noteId = noteId;
-        this.parentId = parentId;
-        this.isDeleted = isDeleted;
-        this.content = content;
-        this.replies = replies;
-    }
-
-    public Comment(Long commentId, Long createdBy, Long noteId, Long parentId, Boolean isDeleted, String content, List<Comment> replies) {
-        this.commentId = commentId;
-        this.createdBy = createdBy;
         this.noteId = noteId;
         this.parentId = parentId;
         this.isDeleted = isDeleted;
@@ -100,11 +94,29 @@ public class Comment {
         this.createdAt = createdAt;
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getAuthorPfp() {
+        return authorPfp;
+    }
+
+    public void setAuthorPfp(String authorPfp) {
+        this.authorPfp = authorPfp;
+    }
+
     @Override
     public String toString() {
         return "Comment{" +
                 "commentId=" + commentId +
                 ", createdBy=" + createdBy +
+                ", author='" + author + '\'' +
+                ", authorPfp='" + authorPfp + '\'' +
                 ", createdAt=" + createdAt +
                 ", noteId=" + noteId +
                 ", parentId=" + parentId +
