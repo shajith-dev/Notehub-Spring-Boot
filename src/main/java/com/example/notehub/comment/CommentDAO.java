@@ -2,10 +2,11 @@ package com.example.notehub.comment;
 
 import com.example.jooq.generated.tables.records.CommentsRecord;
 import org.jooq.DSLContext;
-import org.jooq.Record7;
+import org.jooq.Record8;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.example.jooq.generated.Tables.COMMENTS;
@@ -39,8 +40,8 @@ public class CommentDAO {
     }
 
     public List<Comment> getAllComments(Long noteId){
-         List<Record7<Long, Long, String, Long, Long, String, String>> commentRecords = dslContext
-                .select(COMMENTS.COMMENT_ID,COMMENTS.NOTE_ID,COMMENTS.CONTENT,COMMENTS.PARENT_ID,COMMENTS.CREATED_BY,USERS.USERNAME,USERS.URL)
+         List<Record8<Long, Long, String, Long, Long, String, String, LocalDateTime>> commentRecords = dslContext
+                .select(COMMENTS.COMMENT_ID,COMMENTS.NOTE_ID,COMMENTS.CONTENT,COMMENTS.PARENT_ID,COMMENTS.CREATED_BY,USERS.USERNAME,USERS.URL,COMMENTS.CREATED_AT)
                 .from(COMMENTS)
                 .join(USERS)
                 .on(COMMENTS.CREATED_BY.eq(USERS.USER_ID))
@@ -57,6 +58,7 @@ public class CommentDAO {
             comment.setCreatedBy(record.component5());
             comment.setAuthor(record.component6());
             comment.setAuthorPfp(record.component7());
+            comment.setCreatedAt(record.component8());
             return comment;
         }).toList();
     }
