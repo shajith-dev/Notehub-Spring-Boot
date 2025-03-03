@@ -46,6 +46,10 @@ public class NoteService {
         return noteDAO.createNote(note);
     }
 
+    public Note createNote(Note note){
+        return noteDAO.createNote(note);
+    }
+
     public void deleteNote(Long noteId){
         noteDAO.deleteNote(noteId);
     }
