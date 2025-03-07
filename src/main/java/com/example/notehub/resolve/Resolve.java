@@ -10,8 +10,9 @@ public class Resolve {
     private Long requestId;
     private String url;
     private Boolean approved;
+    private String title;
 
-    public Resolve(Long resolveId, Long submittedBy, LocalDateTime createdAt, Boolean isDeleted, Long requestId, String url, Boolean approved) {
+    public Resolve(Long resolveId, Long submittedBy, LocalDateTime createdAt, Boolean isDeleted, Long requestId, String url, Boolean approved, String title) {
         this.resolveId = resolveId;
         this.submittedBy = submittedBy;
         this.createdAt = createdAt;
@@ -19,6 +20,7 @@ public class Resolve {
         this.requestId = requestId;
         this.url = url;
         this.approved = approved;
+        this.title = title;
     }
 
     public Long getResolveId() {
@@ -77,6 +79,14 @@ public class Resolve {
         this.approved = approved;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Override
     public String toString() {
         return "Resolve{" +
@@ -87,6 +97,7 @@ public class Resolve {
                 ", requestId=" + requestId +
                 ", url='" + url + '\'' +
                 ", approved=" + approved +
+                ", title='" + title + '\'' +
                 '}';
     }
 }

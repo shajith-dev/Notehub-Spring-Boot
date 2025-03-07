@@ -4,9 +4,9 @@ import com.example.notehub.dto.PagedResult;
 import com.example.notehub.note.Note;
 import com.example.notehub.note.NoteService;
 import com.example.notehub.resolve.Resolve;
-import com.example.notehub.resolve.ResolveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,12 +17,9 @@ public class RequestService {
     private RequestDAO requestDAO;
 
     @Autowired
-    private ResolveService resolveService;
-
-    @Autowired
     private NoteService noteService;
 
-    public PagedResult<Request> getAllNotes(List<Long> subjectIds,Long page){
+    public PagedResult<Request> getAllRequests(List<Long> subjectIds,Long page){
         return requestDAO.getAllRequests(subjectIds,page);
     }
 
@@ -34,11 +31,15 @@ public class RequestService {
         requestDAO.deleteRequest(requestId);
     }
 
-    public void resolveRequest(Resolve resolve){
+    @Transactional
+    public void resolveRequest(Long requestId, Resolve resolve){
+        Request request = requestDAO.getRequestById(requestId);
         requestDAO.resolveRequest(resolve);
-        resolveService.approveResolve(resolve.getResolveId());
         Note note = new Note();
+        note.setTitle(resolve.getTitle());
         note.setUrl(resolve.getUrl());
+        note.setSubjectId(request.getSubjectId());
+        note.setCreatedBy(resolve.getSubmittedBy());
         noteService.createNote(note);
     }
 }
