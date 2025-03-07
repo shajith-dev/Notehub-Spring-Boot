@@ -73,4 +73,11 @@ public class RequestDAO {
                 .execute();
     }
 
+    public Request getRequestById(Long requestId){
+        return dslContext.selectFrom(REQUESTS)
+                .where(REQUESTS.REQUEST_ID.eq(requestId))
+                .and(REQUESTS.IS_DELETED.eq(false))
+                .fetchOneInto(Request.class);
+    }
+
 }
