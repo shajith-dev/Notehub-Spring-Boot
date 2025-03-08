@@ -53,7 +53,7 @@ public class NoteDAO {
 
     public PagedResult<Note> searchNotes(String query,List<Long> subjectIds, Long page){
         Condition subjectCondition = !(subjectIds == null || subjectIds.isEmpty()) ? NOTES.SUBJECT_ID.in(subjectIds) : DSL.trueCondition();
-        Condition queryCondition = query.isEmpty() ? DSL.trueCondition() : NOTES.TITLE.contains(query);
+        Condition queryCondition = query.isEmpty() ? DSL.trueCondition() : NOTES.TITLE.containsIgnoreCase(query);
 
         List<Note> notes = dslContext.select(
                     NOTES.NOTE_ID,
