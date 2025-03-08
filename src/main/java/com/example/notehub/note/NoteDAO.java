@@ -10,13 +10,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.example.jooq.generated.Tables.NOTES;
+import static com.example.jooq.generated.Tables.*;
 
 @Repository
 public class NoteDAO {
 
-    private static final Long OFFSET = 2L;
-    private static final Long LIMIT = 2L;
+    private static final Long OFFSET = 10L;
+    private static final Long LIMIT = 10L;
 
     @Autowired
     private DSLContext dslContext;
@@ -51,18 +51,41 @@ public class NoteDAO {
                 .execute();
     }
 
-    public PagedResult<Note> searchNotes(String query, List<Long> subjectIds, Long page) {
+    public PagedResult<Note> searchNotes(String query,List<Long> subjectIds, Long page){
         Condition subjectCondition = !(subjectIds == null || subjectIds.isEmpty()) ? NOTES.SUBJECT_ID.in(subjectIds) : DSL.trueCondition();
+        Condition queryCondition = query.isEmpty() ? DSL.trueCondition() : NOTES.TITLE.contains(query);
 
-        List<Note> notes = dslContext.selectFrom(NOTES)
-                .where(NOTES.TITLE.contains(query))
+        List<Note> notes = dslContext.select(
+                    NOTES.NOTE_ID,
+                    NOTES.TITLE,
+                    NOTES.CREATED_BY,
+                    NOTES.URL,
+                    NOTES.SUBJECT_ID,
+                    SUBJECTS.NAME,
+                    USERS.USERNAME
+                )
+                .from(NOTES)
+                .join(SUBJECTS)
+                .on(NOTES.SUBJECT_ID.eq(SUBJECTS.SUBJECT_ID))
+                .join(USERS)
+                .on(NOTES.CREATED_BY.eq(USERS.USER_ID))
+                .where(NOTES.IS_DELETED.eq(false))
+                .and(queryCondition)
                 .and(subjectCondition)
-                .and(NOTES.IS_DELETED.eq(false))
                 .orderBy(NOTES.NOTE_ID)
                 .limit(LIMIT + 1)
                 .offset(OFFSET * page)
-                .fetchInto(Note.class);
-
+                .fetch(record -> {
+                    Note note = new Note();
+                    note.setTitle(record.get(NOTES.TITLE));
+                    note.setNoteId(record.get(NOTES.NOTE_ID));
+                    note.setCreatedBy(record.get(NOTES.CREATED_BY));
+                    note.setAuthor(record.get(USERS.USERNAME));
+                    note.setUrl(record.get(NOTES.URL));
+                    note.setSubjectName(record.get(SUBJECTS.NAME));
+                    note.setSubjectId(record.get(NOTES.SUBJECT_ID));
+                    return note;
+                });
 
         boolean hasMore = notes.size() > LIMIT;
 
@@ -71,13 +94,47 @@ public class NoteDAO {
         }
 
         return new PagedResult<>(notes, hasMore);
+
     }
 
-    public List<Note> getNotes(Long userId){
-        return dslContext.selectFrom(NOTES)
-                .where(NOTES.CREATED_BY.eq(userId))
-                .and(NOTES.IS_DELETED.eq(false))
-                .fetchInto(Note.class);
+    public PagedResult<Note> getNotes(Long userId,Long page){
+        List<Note> notes = dslContext.select(
+                        NOTES.NOTE_ID,
+                        NOTES.TITLE,
+                        NOTES.CREATED_BY,
+                        NOTES.URL,
+                        NOTES.SUBJECT_ID,
+                        SUBJECTS.NAME,
+                        USERS.USERNAME
+                )
+                .from(NOTES)
+                .join(SUBJECTS)
+                .on(NOTES.SUBJECT_ID.eq(SUBJECTS.SUBJECT_ID))
+                .join(USERS)
+                .on(NOTES.CREATED_BY.eq(USERS.USER_ID))
+                .where(NOTES.IS_DELETED.eq(false))
+                .orderBy(NOTES.NOTE_ID)
+                .limit(LIMIT + 1)
+                .offset(OFFSET * page)
+                .fetch(record -> {
+                    Note note = new Note();
+                    note.setTitle(record.get(NOTES.TITLE));
+                    note.setNoteId(record.get(NOTES.NOTE_ID));
+                    note.setCreatedBy(record.get(NOTES.CREATED_BY));
+                    note.setAuthor(record.get(USERS.USERNAME));
+                    note.setUrl(record.get(NOTES.URL));
+                    note.setSubjectName(record.get(SUBJECTS.NAME));
+                    note.setSubjectId(record.get(NOTES.SUBJECT_ID));
+                    return note;
+                });
+
+        boolean hasMore = notes.size() > LIMIT;
+
+        if (hasMore) {
+            notes.removeLast();
+        }
+
+        return new PagedResult<>(notes, hasMore);
     }
 
 }

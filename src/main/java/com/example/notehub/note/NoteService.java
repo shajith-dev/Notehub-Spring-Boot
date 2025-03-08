@@ -58,9 +58,9 @@ public class NoteService {
         return noteDAO.searchNotes(query,subjectIds,page);
     }
 
-    public List<Note> getMyNotes(){
+    public PagedResult<Note> getMyNotes(Long page){
         String userName = userService.getCurrentUsername();
         User user = userService.getUserByUserName(userName);
-        return noteDAO.getNotes(user.getUserId());
+        return noteDAO.getNotes(user.getUserId(),page);
     }
 }

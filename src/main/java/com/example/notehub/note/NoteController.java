@@ -33,8 +33,12 @@ public class NoteController {
     }
 
     @GetMapping(path = "/me")
-    public List<Note> getMyNotes(){
-        return noteService.getMyNotes();
+    public PagedResult<Note> getMyNotes(@RequestParam(defaultValue = "0") Long page){
+        return noteService.getMyNotes(page);
     }
 
+    @DeleteMapping(path = "/{noteId}")
+    public void deleteNote(@PathVariable Long noteId){
+        noteService.deleteNote(noteId);
+    }
 }

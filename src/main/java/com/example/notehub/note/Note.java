@@ -8,10 +8,12 @@ public class Note {
     private String url;
     private Long subjectId;
     private String description;
+    private String subjectName;
+    private String author;
 
     public Note(){}
 
-    public Note(Long noteId, Long createdBy, Boolean isDeleted, String title, String description, String url, Long subjectId) {
+    public Note(Long noteId, Long createdBy, Boolean isDeleted, String title, String url, Long subjectId, String description, String subjectName, String author) {
         this.noteId = noteId;
         this.createdBy = createdBy;
         this.isDeleted = isDeleted;
@@ -19,6 +21,8 @@ public class Note {
         this.url = url;
         this.subjectId = subjectId;
         this.description = description;
+        this.subjectName = subjectName;
+        this.author = author;
     }
 
     public Long getNoteId() {
@@ -77,6 +81,22 @@ public class Note {
         this.description = description;
     }
 
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     @Override
     public String toString() {
         return "Note{" +
@@ -87,6 +107,8 @@ public class Note {
                 ", url='" + url + '\'' +
                 ", subjectId=" + subjectId +
                 ", description='" + description + '\'' +
+                ", subjectName='" + subjectName + '\'' +
+                ", author='" + author + '\'' +
                 '}';
     }
 }

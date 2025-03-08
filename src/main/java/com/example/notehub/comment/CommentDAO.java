@@ -31,36 +31,51 @@ public class CommentDAO {
         return comment;
     }
 
-    public void deleteComment(Long commentId){
+    public void deleteComment(Long noteId,Long commentId){
         dslContext.update(COMMENTS)
                 .set(COMMENTS.IS_DELETED,true)
                 .where(COMMENTS.COMMENT_ID.eq(commentId))
+                .and(COMMENTS.NOTE_ID.eq(noteId))
+                .and(COMMENTS.IS_DELETED.eq(false))
+                .execute();
+        dslContext.update(COMMENTS)
+                .set(COMMENTS.IS_DELETED,true)
+                .where(COMMENTS.PARENT_ID.eq(commentId))
+                .and(COMMENTS.NOTE_ID.eq(noteId))
                 .and(COMMENTS.IS_DELETED.eq(false))
                 .execute();
     }
 
-    public List<Comment> getAllComments(Long noteId){
-         List<Record8<Long, Long, String, Long, Long, String, String, LocalDateTime>> commentRecords = dslContext
-                .select(COMMENTS.COMMENT_ID,COMMENTS.NOTE_ID,COMMENTS.CONTENT,COMMENTS.PARENT_ID,COMMENTS.CREATED_BY,USERS.USERNAME,USERS.URL,COMMENTS.CREATED_AT)
+    public List<Comment> getAllComments(Long noteId) {
+        return dslContext
+                .select(
+                        COMMENTS.COMMENT_ID,
+                        COMMENTS.NOTE_ID,
+                        COMMENTS.CONTENT,
+                        COMMENTS.PARENT_ID,
+                        COMMENTS.CREATED_BY,
+                        USERS.USERNAME,
+                        USERS.URL,
+                        COMMENTS.CREATED_AT
+                )
                 .from(COMMENTS)
                 .join(USERS)
                 .on(COMMENTS.CREATED_BY.eq(USERS.USER_ID))
                 .where(COMMENTS.NOTE_ID.eq(noteId))
                 .and(COMMENTS.IS_DELETED.isFalse())
                 .orderBy(COMMENTS.CREATED_AT)
-                .fetch();
-        return commentRecords.stream().map(record -> {
-            Comment comment = new Comment();
-            comment.setCommentId(record.component1());
-            comment.setNoteId(record.component2());
-            comment.setContent(record.component3());
-            comment.setParentId(record.component4());
-            comment.setCreatedBy(record.component5());
-            comment.setAuthor(record.component6());
-            comment.setAuthorPfp(record.component7());
-            comment.setCreatedAt(record.component8());
-            return comment;
-        }).toList();
+                .fetch(record -> {
+                    Comment comment = new Comment();
+                    comment.setCommentId(record.get(COMMENTS.COMMENT_ID));
+                    comment.setNoteId(record.get(COMMENTS.NOTE_ID));
+                    comment.setContent(record.get(COMMENTS.CONTENT));
+                    comment.setParentId(record.get(COMMENTS.PARENT_ID));
+                    comment.setCreatedBy(record.get(COMMENTS.CREATED_BY));
+                    comment.setAuthor(record.get(USERS.USERNAME));
+                    comment.setAuthorPfp(record.get(USERS.URL));
+                    comment.setCreatedAt(record.get(COMMENTS.CREATED_AT));
+                    return comment;
+                });
     }
 
     public Comment editComment(Long noteId,Long commentId,String content){

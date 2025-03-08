@@ -12,8 +12,9 @@ public class Request {
     private Long resolvedBy;
     private Boolean isDeleted;
     private String description;
+    private String author;
 
-    public Request(Long requestId, String title, Long subjectId, Long requestedBy, LocalDateTime createdAt, Boolean resolved, Long resolvedBy, Boolean isDeleted, String description) {
+    public Request(Long requestId, String title, Long subjectId, Long requestedBy, LocalDateTime createdAt, Boolean resolved, Long resolvedBy, Boolean isDeleted, String description, String author) {
         this.requestId = requestId;
         this.title = title;
         this.subjectId = subjectId;
@@ -23,6 +24,7 @@ public class Request {
         this.resolvedBy = resolvedBy;
         this.isDeleted = isDeleted;
         this.description = description;
+        this.author = author;
     }
 
     public Long getRequestId() {
@@ -81,6 +83,14 @@ public class Request {
         this.resolvedBy = resolvedBy;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Boolean getDeleted() {
         return isDeleted;
     }
@@ -89,12 +99,12 @@ public class Request {
         isDeleted = deleted;
     }
 
-    public String getDescription() {
-        return description;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     @Override
@@ -109,6 +119,7 @@ public class Request {
                 ", resolvedBy=" + resolvedBy +
                 ", isDeleted=" + isDeleted +
                 ", description='" + description + '\'' +
+                ", author='" + author + '\'' +
                 '}';
     }
 }

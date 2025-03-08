@@ -14,8 +14,8 @@ public class CommentService {
         return commentDAO.createComment(comment);
     }
 
-    public void deleteComment(Long commentId){
-        commentDAO.deleteComment(commentId);
+    public void deleteComment(Long noteId,Long commentId){
+        commentDAO.deleteComment(noteId,commentId);
     }
 
     public List<Comment> getAllComments(Long noteId) {

@@ -3,10 +3,12 @@ package com.example.notehub.request;
 import com.example.notehub.dto.PagedResult;
 import com.example.notehub.note.Note;
 import com.example.notehub.note.NoteService;
-import com.example.notehub.resolve.Resolve;
+import com.example.notehub.users.User;
+import com.example.notehub.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,6 +20,9 @@ public class RequestService {
 
     @Autowired
     private NoteService noteService;
+
+    @Autowired
+    private UserService userService;
 
     public PagedResult<Request> getAllRequests(List<Long> subjectIds,Long page){
         return requestDAO.getAllRequests(subjectIds,page);
@@ -32,14 +37,14 @@ public class RequestService {
     }
 
     @Transactional
-    public void resolveRequest(Long requestId, Resolve resolve){
-        Request request = requestDAO.getRequestById(requestId);
-        requestDAO.resolveRequest(resolve);
-        Note note = new Note();
-        note.setTitle(resolve.getTitle());
-        note.setUrl(resolve.getUrl());
-        note.setSubjectId(request.getSubjectId());
-        note.setCreatedBy(resolve.getSubmittedBy());
-        noteService.createNote(note);
+    public void resolveRequest(Long requestId, Note note, MultipartFile file){
+        note = noteService.createNote(note,file);
+        requestDAO.resolveRequest(requestId,note.getCreatedBy());
+    }
+
+    public PagedResult<Request> getMyRequests(Long page){
+        String userName = userService.getCurrentUsername();
+        User user = userService.getUserByUserName(userName);
+        return requestDAO.getMyRequests(user.getUserId(),page);
     }
 }
