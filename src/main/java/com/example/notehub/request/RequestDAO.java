@@ -63,7 +63,7 @@ public class RequestDAO {
         boolean hasMore = requests.size() > LIMIT;
 
         if (hasMore) {
-            requests.removeLast(); // Better than removeLast() for List implementations
+            requests.remove(requests.size()-1); // Better than removeLast() for List implementations
         }
 
         return new PagedResult<>(requests, hasMore);
@@ -146,7 +146,7 @@ public class RequestDAO {
         boolean hasMore = requests.size() > LIMIT;
 
         if (hasMore) {
-            requests.removeLast(); // Better than removeLast() for List implementations
+            requests.remove(requests.size()-1); // Better than removeLast() for List implementations
         }
 
         return new PagedResult<>(requests, hasMore);

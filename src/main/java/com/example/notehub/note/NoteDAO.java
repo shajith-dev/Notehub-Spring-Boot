@@ -90,7 +90,7 @@ public class NoteDAO {
         boolean hasMore = notes.size() > LIMIT;
 
         if (hasMore) {
-            notes.removeLast();
+            notes.remove(notes.size()-1);
         }
 
         return new PagedResult<>(notes, hasMore);
@@ -131,7 +131,7 @@ public class NoteDAO {
         boolean hasMore = notes.size() > LIMIT;
 
         if (hasMore) {
-            notes.removeLast();
+            notes.remove(notes.size() - 1);
         }
 
         return new PagedResult<>(notes, hasMore);
