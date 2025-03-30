@@ -37,14 +37,19 @@ public class RequestService {
     }
 
     @Transactional
-    public void resolveRequest(Long requestId, Note note, MultipartFile file){
+    public Note resolveRequest(Long requestId, Note note, MultipartFile file){
         note = noteService.createNote(note,file);
         requestDAO.resolveRequest(requestId,note.getCreatedBy());
+        return note;
     }
 
     public PagedResult<Request> getMyRequests(Long page){
         String userName = userService.getCurrentUsername();
         User user = userService.getUserByUserName(userName);
         return requestDAO.getMyRequests(user.getUserId(),page);
+    }
+
+    public Request getRequestById(Long requestId){
+        return requestDAO.getRequestById(requestId);
     }
 }
